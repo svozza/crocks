@@ -55,7 +55,7 @@ function Reader(runWith) {
         throw new TypeError('Reader.' + method + ': Function required')
       }
 
-      return Reader(e => runWith(fn(e)))
+      return Reader(compose(runWith, fn))
     }
   }
 
