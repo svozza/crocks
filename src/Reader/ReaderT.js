@@ -90,6 +90,14 @@ function _ReaderT(Monad) {
       return ReaderT(e => runWith(e).map(fn))
     }
 
+    function local(fn) {
+      if(!isFunction(fn)) {
+        throw new TypeError(type() + '.local: Function required')
+      }
+
+      return ReaderT(function (e) { return runWith(fn(e)) })
+    }
+
     function ap(m) {
       if(!isSameType(ReaderT, m)) {
         throw new TypeError(`${type()}.ap: ${type()} required`)
@@ -118,7 +126,7 @@ function _ReaderT(Monad) {
 
     return {
       inspect, toString: inspect, type,
-      runWith, of, map, ap, chain,
+      runWith, of, map, local, ap, chain,
       [fl.of]: of,
       [fl.map]: map,
       [fl.chain]: chain,

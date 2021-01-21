@@ -49,6 +49,16 @@ function Reader(runWith) {
     }
   }
 
+  function local(method) {
+    return function(fn) {
+      if(!isFunction(fn)) {
+        throw new TypeError('Reader.' + method + ': Function required')
+      }
+
+      return Reader(compose(runWith, fn))
+    }
+  }
+
   function ap(m) {
     if(!isSameType(Reader, m)) {
       throw new TypeError('Reader.ap: Reader required')
@@ -87,6 +97,7 @@ function Reader(runWith) {
     inspect, toString: inspect, runWith,
     type, ap, of,
     map: map('map'),
+    local: local('local'),
     chain: chain('chain'),
     [fl.of]: of,
     [fl.map]: map(fl.map),
